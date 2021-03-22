@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+/* Density Traffic Estimator Service Interface
+ * predict: Unary-to-unary rpc call: one request and one response
+ */
+service DensityTrafficEstimatorService {
+    rpc predict (PredictRequest) returns (PredictResponse) {}
+}
+
+/* Predict Request
+ * image_data: bytes of the image to process
+ */
+message PredictRequest {
+    bytes image_data = 1;
+}
+
+/* Predict Response
+ * dmap_data: bytes of the density map to visualize
+ * num_objs: estimated number of vechiles present in the scene
+ */
+message PredictResponse {
+    bytes dmap_data = 1;
+    int32 num_objs = 2;
+}

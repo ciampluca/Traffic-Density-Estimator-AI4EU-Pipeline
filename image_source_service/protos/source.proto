@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+/**
+ * Image service
+ * receives an empty message in order to request the next image
+ * returns a new image to process
+ */
+service ImageSourceService {
+   rpc Get (Empty) returns (Image);
+}
+
+/*
+ * Image to analyse
+ * param data: bytes of the image file
+ *             encoded in some image format
+ */
+message Image {
+    bytes data = 1;
+}
+
+message Empty {}

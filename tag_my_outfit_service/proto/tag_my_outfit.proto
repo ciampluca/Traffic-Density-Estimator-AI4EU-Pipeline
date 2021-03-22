@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+/* Tag My Outfit Service Interface
+ * predict: Unary-to-unary rpc call: one request and one response
+ * stream_predict: Stream-to-unary rpc call: multiple requests and one response
+ *                 with predictions for all requests
+ */
+service TagMyOutfitService {
+    rpc predict (PredictRequest) returns (PredictResponse) {}
+    rpc stream_predict (stream PredictRequest) returns (StreamPredictResponse) {}
+}
+
+/* Predict Request
+ * image_data: bytes of the image to process
+ * all_categories (default to false): true if response should contain
+ *      all possible categories and false only for the selected one (Single Label)
+ * all_attributes (default to false): true if response should contain
+ *      all possible attributes and false only for the selected ones (Multi Label)
+ */
+message PredictRequest {
+    bytes image_data = 1;
+    bool all_categories = 2;
+    bool all_attributes = 3;
+}
+
+/* Predict Response
+ * categories: data associated with the predicted categories
+ * attributes: data associated with the predicted attributes
+ */
+message PredictResponse {
+    repeated Correspondence categories = 2;
+    repeated Correspondence attributes = 3;
+}
+
+/* Predict Response for Requests stream
+ * predictions: results associated to each prediction in order
+ */
+message StreamPredictResponse {
+    repeated Prediction predictions = 1;
+}
+
+/* Results associated to a single prediction in a stream request
+ * categories: data associated with the predicted categories
+ * attributes: data associated with the predicted attributes
+ */
+message Prediction {
+    repeated Correspondence categories = 1;
+    repeated Correspondence attributes = 2;
+}
+
+/* Correspondence between a label and its value */
+message Correspondence {
+    string label = 1;
+    double value = 2;
+}

@@ -1,0 +1,12 @@
+environment:
+  host: '[::]'
+  port: 8061
+server_variables:
+  model_dir: model
+  logs_dir: logs
+  ohe_categories: categories_encoder_params.pkl
+  ohe_attributes: attributes_encoder_params.pkl
+  weights: weights.h5
+  profile_file: profile.pstats
+  log_level: INFO
+  profile: False
