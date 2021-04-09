@@ -1,0 +1,4 @@
+grpcio==1.35.0
+grpcio-tools==1.35.0
+grpcio-reflection==1.35.0
+protobuf==3.14.0

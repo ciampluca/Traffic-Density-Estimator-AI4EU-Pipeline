@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+/**
+ * Image service
+ * receives an empty message in order to request the next image
+ * returns a new image to process
+ */
+service ImageSourceService {
+   rpc Get (Empty) returns (PredictRequest);
+}
+
+/* Predict Request
+ * image_data: bytes of the image to process
+ */
+message PredictRequest {
+    bytes image_data = 1;
+}
+
+message Empty {}

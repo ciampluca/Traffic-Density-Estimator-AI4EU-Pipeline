@@ -1,0 +1,38 @@
+version: '3'
+services:
+  # By default the gRPC servers are listening at port 8061,
+  # according to AI4EU specifications.
+  # We can distinguish servers by host, defined by the service name
+  # See https://docs.docker.com/compose/networking/
+  image-source:
+    build:
+      context: ./image_source_service/
+      dockerfile: docker/Dockerfile
+    image: ciampluca/image_source_service:latest
+    volumes:
+    - type: bind
+      source: ./traffic_imgs/
+      target: /workspace/imgs/
+  traffic-density-estimator:
+    build:
+      context: ./traffic_density_estimator_service/
+      dockerfile: docker/Dockerfile
+    image: ciampluca/traffic_density_estimator_service:latest
+  visualization:
+    build:
+      context: ./visualization_service/
+      dockerfile: docker/Dockerfile
+    image: ciampluca/visualization_service:latest
+    # Only port visible outside the docker environment
+    # to see the images in the web
+    ports:
+      - 5000:5000
+  orchestrator-node:
+    image: sipgisr/grpc-orchestrator:latest
+    volumes:
+      - type: bind
+        source: ./config
+        target: /app/config
+    environment:
+      CONFIG_FILE: "config/orchestrator_config.yaml"
+    command: bash -c "/usr/bin/wait-for-all.sh config/urls.txt && java -cp '*' pipeline.orchestrator.App"

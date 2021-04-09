@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+/**
+ * Visualization service
+ * receives a message containing an image to be displayed, and a number to draw over the image
+ * returns an empty message
+ */
+service VisualizationService {
+    rpc Visualize(PredictResponse) returns (Empty);
+}
+
+/*
+ * Message to visualize
+ * param image_data: bytes of the image file to show encoded in some image format
+ * num_objs: int representing num of vehicles present in the image (to be converted in string and draw over the image)
+ */
+message PredictResponse {
+    bytes image_data = 1;
+    int32 num_objs = 2;
+}
+
+message Empty {}

@@ -1,16 +1,23 @@
-from traffic_density_estimator_pb2_grpc import DensityTrafficEstimatorServiceServicer
+from traffic_density_estimator_pb2_grpc import TrafficDensityEstimatorServiceServicer
 from traffic_density_estimator_pb2 import PredictRequest, PredictResponse
 
-from annotations.profiling import profile
+from model.service import TrafficDensityEstimatorService
 
 
-class GrpcTrafficDensityEstimatorServiceImpl(DensityTrafficEstimatorServiceServicer):
+class GrpcTrafficDensityEstimatorServiceImpl(TrafficDensityEstimatorServiceServicer):
 
-    def __init__(self, service: TrafficEstimatorService):
+    def __init__(self, service: TrafficDensityEstimatorService):
         self.__service = service
 
-    @profile
     def predict(self, request: PredictRequest, context):
         dmap, num_objs = self.__process_single_predict(request)
-        return PredictResponse(categories=categories_results,
-                               attributes=attributes_results)
+
+        return PredictResponse(image_data=dmap,
+                               num_objs=num_objs)
+
+    def __process_single_predict(self, request):
+        image_bytes = request.image_data
+        dmap, num_objs = self.__service.predict(image_bytes)
+
+        return dmap, num_objs
+

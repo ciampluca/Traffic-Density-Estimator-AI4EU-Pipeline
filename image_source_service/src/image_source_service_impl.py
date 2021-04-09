@@ -44,6 +44,6 @@ class ImageSourceServiceImpl(source_grpc.ImageSourceServiceServicer):
     def __get_response_from_path(image_path):
         with open(image_path, 'rb') as fp:
             image_bytes = fp.read()
-            response = source.Image(data=image_bytes)
+        response = source.PredictRequest(image_data=image_bytes)
 
         return response

@@ -36,7 +36,7 @@ def get_images(channel, delay, num_gets):
     for i in range(num_gets):
         req = source.Empty()
         image_data = stub.Get(request=req)
-        image_bytes = image_data.data
+        image_bytes = image_data.image_data
 
         time.sleep(delay)
 

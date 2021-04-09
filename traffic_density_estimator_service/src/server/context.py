@@ -3,7 +3,7 @@ import os
 import yaml
 from itertools import starmap
 
-_CONFIG_FILE = 'config/config.yml'
+_CONFIG_FILE = 'config/config.yaml'
 
 _LOG_FORMAT = '[ %(levelname)s ] %(asctime)s (%(module)s) %(message)s'
 _LOG_DATE_FORMAT = '%Y-%m-%d %H:%M:%S'

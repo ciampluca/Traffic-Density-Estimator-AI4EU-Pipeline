@@ -2,10 +2,9 @@ import argparse
 import grpc
 import time
 import pathlib
-from random import randrange
 
-import visualization_pb2 as vis
-import visualization_pb2_grpc as vis_grpc
+import traffic_density_estimator_pb2_grpc as den_grpc
+import traffic_density_estimator_pb2 as den
 
 
 def parse_args():
@@ -40,18 +39,15 @@ def send_image(stub, img_path):
     with open(img_path, 'rb') as fp:
         image_bytes = fp.read()
 
-    fake_num_objs = randrange(100)
-
-    req = vis.PredictResponse(
-        image_data=image_bytes,
-        num_objs=fake_num_objs
+    req = den.PredictRequest(
+        image_data=image_bytes
     )
 
-    stub.Visualize(request=req)
+    stub.predict(request=req)
 
 
 def send_images(channel, images_dir, delay):
-    stub = vis_grpc.VisualizationServiceStub(channel=channel)
+    stub = den_grpc.TrafficDensityEstimatorServiceStub(channel=channel)
 
     path = pathlib.Path(images_dir)
     for img_path in images_paths_generator(path):

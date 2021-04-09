@@ -1,0 +1,22 @@
+stages:
+  - name: "Source"
+    host: image-source
+    port: 8061
+    method: Get
+  - name: "TrafficDensityEstimator"
+    host: traffic-density-estimator
+    port: 8061
+    method: predict
+  - name: "Visualization"
+    host: visualization
+    port: 8061
+    method: Visualize
+links:
+  - source:
+      stage: "Source"
+    target:
+      stage: "TrafficDensityEstimator"
+  - source:
+      stage: "TrafficDensityEstimator"
+    target:
+      stage: "Visualization"

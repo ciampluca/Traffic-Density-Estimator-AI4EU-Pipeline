@@ -22,7 +22,7 @@ def parse_argv():
     main_parser.add_argument(
         'image_dir',
         nargs='?',
-        default='images',
+        default='imgs',
         help='source directory of the images to send (defaults to images)'
     )
     main_parser.add_argument(

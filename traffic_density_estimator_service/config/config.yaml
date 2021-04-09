@@ -1,0 +1,9 @@
+environment:
+  host: '[::]'
+  port: 8061
+server_variables:
+  model_dir: model
+  logs_dir: logs
+  weights: density_estimator_model.pth
+  log_level: INFO
+  img_output_dim: [641, 640]

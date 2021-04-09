@@ -21,8 +21,8 @@ class VisualizationServiceImpl(vis_grpc.VisualizationServiceServicer):
         self.__font = ImageFont.load_default()
         self.__current_img = current_image
 
-    def Visualize(self, request: vis.VisualizationRequest, context):
-        image_bytes = request.image.data
+    def Visualize(self, request: vis.PredictResponse, context):
+        image_bytes = request.image_data
         img = Image.open(io.BytesIO(image_bytes)).resize((300, 300)).convert('RGB')
 
         # Add space for text
