@@ -23,7 +23,7 @@ def parse_argv():
         'image_dir',
         nargs='?',
         default='imgs',
-        help='source directory of the images to send (defaults to images)'
+        help='source directory of the images to send (defaults to imgs)'
     )
     main_parser.add_argument(
         '--port',

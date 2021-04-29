@@ -13,14 +13,15 @@ class ImageSourceServiceImpl(source_grpc.ImageSourceServiceServicer):
 
     def __init__(self, image_dir: pathlib.Path):
         self.__image_dir = image_dir
+        self.__directory_iter = self.__get_directory_images_iter()
 
     def Get(self, request, context):
         image_path = None
         while True:
-            directory_iter = self.__get_directory_images_iter()
+            # directory_iter = self.__get_directory_images_iter()
             while not image_path:
                 try:
-                    image_path = next(directory_iter, None)
+                    image_path = next(self.__directory_iter, None)
                     logging.info("Getting image: {}".format(image_path))
                 except StopIteration:
                     logging.error(
@@ -31,7 +32,9 @@ class ImageSourceServiceImpl(source_grpc.ImageSourceServiceServicer):
                 break
         time.sleep(_DELAY)
 
-        return self.__get_response_from_path(image_path)
+        response = self.__get_response_from_path(image_path)
+
+        return response
 
     def __get_directory_images_iter(self):
         directory_iter = filter(
