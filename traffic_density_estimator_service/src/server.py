@@ -32,11 +32,13 @@ def start_server():
     # Get configs
     server_context = Context()
     model_dir = server_context.model_dir
+    metadata_dir = server_context.metadata_dir
     model_weights_path = os.path.join(model_dir, server_context.weights)
     img_output_dim = (server_context.img_output_dim[0], server_context.img_output_dim[1]) if hasattr(server_context, 'img_output_dim') else _IMG_OUTPUT_DIM
+    roi_json_file = os.path.join(metadata_dir, server_context.roi) if hasattr(server_context, 'roi') else None
 
     # Init handlers
-    preprocess_handler: PreprocessHandler = PreprocessHandler(img_output_dim)
+    preprocess_handler: PreprocessHandler = PreprocessHandler(apply_roi=roi_json_file)
     prediction_handler: PredictionHandler = PredictionHandler(model_weights_path)
     results_handler: ResultsHandler = ResultsHandler(img_output_dim)
 

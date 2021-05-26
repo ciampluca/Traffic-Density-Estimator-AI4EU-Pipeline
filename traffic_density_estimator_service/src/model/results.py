@@ -11,7 +11,7 @@ class ResultsHandler:
         super(ResultsHandler, self).__init__()
         self.img_output_dim = img_output_dim
 
-    def build_results(self, prediction):
+    def build_results(self, original_img_dim, prediction):
         den_map = prediction.squeeze()
 
         # Computing estimated number of vehicles present in the scene
@@ -27,11 +27,10 @@ class ResultsHandler:
             den_map *= (255.0 / (maxval - minval))
         den_map = den_map.astype('uint8')
 
-        # Resizing and converting to RGB
+        # Converting to RGB, eventually removing added pad, resizing to output dim
         den_map = Image.fromarray(den_map).convert('RGB')
-        den_map = self.__remove_pad(den_map)
-
-        den_map = den_map.resize((self.img_output_dim[0], self.img_output_dim[0])).convert('RGB')
+        den_map = self.__remove_pad(den_map, original_img_dim)
+        den_map = den_map.resize((self.img_output_dim[0], self.img_output_dim[0]))
 
         # Converting to bytes
         den_map_bytes = io.BytesIO()
@@ -40,18 +39,18 @@ class ResultsHandler:
 
         return den_map_bytes, num_objs
 
-    def __remove_pad(self, img):
+    def __remove_pad(self, img, output_dim):
         img_width, img_height = img.size
 
-        if img_width == self.img_output_dim[0] and img_height == self.img_output_dim[1]:
+        if img_width == output_dim[0] and img_height == output_dim[1]:
             return img
 
-        pad_w = img_width - self.img_output_dim[0]
+        pad_w = img_width - output_dim[0]
         w_pad_left = pad_w // 2
 
-        pad_h = img_height - self.img_output_dim[1]
+        pad_h = img_height - output_dim[1]
         h_pad_top = pad_h // 2
 
-        img = F.crop(img, h_pad_top, w_pad_left, self.img_output_dim[1], self.img_output_dim[0])
+        img = F.crop(img, h_pad_top, w_pad_left, output_dim[1], output_dim[0])
 
         return img

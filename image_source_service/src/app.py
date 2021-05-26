@@ -20,10 +20,11 @@ _SERVICE_NAME = 'ImageSourceService'
 def parse_argv():
     main_parser = argparse.ArgumentParser()
     main_parser.add_argument(
-        'image_dir',
+        'source',
         nargs='?',
-        default='imgs',
-        help='source directory of the images to send (defaults to imgs)'
+        # default='imgs',
+        default='http://printart.isr.ist.utl.pt:9011/?action=snapshot',
+        help='source directory or url of the images to send (defaults to imgs)'
     )
     main_parser.add_argument(
         '--port',
@@ -35,10 +36,12 @@ def parse_argv():
     return main_parser.parse_args()
 
 
-def run_pull_mode(image_dir, port):
+def run_pull_mode(img_source, port):
+    if not img_source.startswith("http"):
+        img_source = pathlib.Path(img_source)
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     source_grpc.add_ImageSourceServiceServicer_to_server(
-        image_source_service_impl.ImageSourceServiceImpl(pathlib.Path(image_dir)),
+        image_source_service_impl.ImageSourceServiceImpl(img_source),
         server)
     SERVICE_NAME = (
         source.DESCRIPTOR.services_by_name[_SERVICE_NAME].full_name,
@@ -53,12 +56,12 @@ def run_pull_mode(image_dir, port):
 
 def main():
     args = parse_argv()
-    image_dir = args.image_dir
-    image_dir = os.getenv(_IMAGES_ENV_VAR, image_dir)
+    img_source = args.source
+    # image_dir = os.getenv(_IMAGES_ENV_VAR, image_dir)
     port = args.port
     port = os.getenv(_PORT_ENV_VAR, port)
-    logging.info('Recovering images from %s', image_dir)
-    run_pull_mode(image_dir, port)
+    logging.info('Recovering images from %s', img_source)
+    run_pull_mode(img_source, port)
 
 
 if __name__ == '__main__':

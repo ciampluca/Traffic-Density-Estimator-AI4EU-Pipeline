@@ -52,6 +52,7 @@ ARG GROUP=runner-group
 ARG SRC_DIR=src
 ARG CONF_DIR=config
 ARG MODEL_DIR=model
+ARG METADATA_DIR=metadata
 
 # Create non-privileged user to run
 RUN addgroup --system ${GROUP} && \
@@ -82,6 +83,9 @@ COPY --chown=${USER}:${GROUP} ${CONF_DIR}/ ${WORKSPACE}/${CONF_DIR}/
 
 # Copy model to workspace
 COPY --chown=${USER}:${GROUP} ${MODEL_DIR}/ ${WORKSPACE}/${MODEL_DIR}/
+
+# Copy metadata to workspace
+COPY --chown=${USER}:${GROUP} ${METADATA_DIR}/ ${WORKSPACE}/${METADATA_DIR}/
 
 # Change to non-privileged user
 USER ${USER}

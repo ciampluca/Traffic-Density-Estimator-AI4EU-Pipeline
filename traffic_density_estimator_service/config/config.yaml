@@ -6,4 +6,6 @@ server_variables:
   logs_dir: logs
   weights: density_estimator_model.pth
   log_level: INFO
-  img_output_dim: [641, 640]
+  img_output_dim: [640, 640]
+  metadata_dir: metadata
+  # roi: roi.json

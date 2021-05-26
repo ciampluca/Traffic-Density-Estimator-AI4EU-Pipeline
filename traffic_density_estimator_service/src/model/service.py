@@ -20,7 +20,7 @@ class TrafficDensityEstimatorService:
         logging.info(f"Received img number: {self.__imgs_counter}")
         preprocessed_image, original_dim = self.__preprocess_handler.preprocess_image(image_bytes)
         prediction = self.__prediction_handler.predict(preprocessed_image)
-        results = self.__results_handler.build_results(prediction)
+        results = self.__results_handler.build_results(original_dim, prediction)
         logging.info(f"End processing of img number: {self.__imgs_counter}")
         self.__imgs_counter += 1
 

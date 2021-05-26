@@ -24,7 +24,7 @@ def parse_args():
     parser.add_argument(
         '--num_gets',
         type=int,
-        default=5,
+        default=50,
         help='Number of gets to be done to the server')
 
     return parser.parse_args()
@@ -41,6 +41,7 @@ def get_images(channel, delay, num_gets):
         time.sleep(delay)
 
         image = Image.open(io.BytesIO(image_bytes))
+
         image.show()
 
 
